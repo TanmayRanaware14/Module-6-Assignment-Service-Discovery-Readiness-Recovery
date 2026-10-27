@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-client
+  labels:
+    app: inventory-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-client
+  template:
+    metadata:
+      labels:
+        app: inventory-client
+    spec:
+      containers:
+        - name: client
+          image: inventory-service:local
+          imagePullPolicy: IfNotPresent
+          command: ["python", "/app/client.py"]
+          env:
+            - name: INVENTORY_URL
+              value: http://inventory
+            - name: INTERVAL
+              value: "0.4"
